@@ -29,12 +29,8 @@ Route::resource('posts', PostController::class)
 Route::resource('posts', PostController::class)
     ->only(['index', 'show']);
 
-Route::resource('likes', LikeController::class)
-    ->only(['store'])
+Route::resource('posts.likes', LikeController::class)
+    ->only(['store', 'destroy'])
     ->middleware(['auth']);
 
-Route::delete('likes', [LikeController::class, 'destroy'])
-    ->name('likes.destroy')
-    ->middleware('auth');
-    
 require __DIR__.'/auth.php';

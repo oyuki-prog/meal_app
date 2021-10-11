@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
     {
         // Tokenエラーの時、詳細画面にリダイレクトする。
         if ($exception instanceof TokenMismatchException) {
-            return redirect()->route('posts.show', $request->post_id);
+            return back();
         }
 
         return parent::render($request, $exception);

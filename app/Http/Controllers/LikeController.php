@@ -15,35 +15,38 @@ class LikeController extends Controller
             return redirect()
                 ->route('posts.show', $post);
         }
-        $like = new Like($request->all());
-
+        $like = new Like();
+        $like->post_id = $post->id;
+        $like->user_id = Auth::id();
         try {
-            $like->save();
+            $post->likes()->save($like);
             $request->session()->regenerateToken();
         } catch (\Exception $e) {
             return back()->withInput()->withErrors($e->getMessage());
         }
 
         return redirect()
-            ->route('posts.show', $request->post_id);
+            ->route('posts.show', $post);
     }
 
     public function destroy(Request $request, Post $post, Like $like)
     {
-        if ($request->user()->cannot('destroy', $like)) {
-            return redirect()
-                ->route('posts.show', $like);
-        }
+        // if ($request->user()->cannot('destroy', $like)) {
+        //     return redirect()
+        //         ->route('posts.show', $post);
+        // }
 
         try {
-            Like::where('user_id', Auth::id())
-                ->where('post_id', $request->post_id)
-                ->delete();
+            if (!empty($like)) {
+                $like->delete();
+                $request->session()->regenerateToken();
+            }
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors($e->getMessage());
+            return redirect()
+                ->route('posts.show', $post)->withErrors($e->getMessage());
         }
 
         return redirect()
-            ->route('posts.show', $request->post_id);
+            ->route('posts.show', $post);
     }
 }

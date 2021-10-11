@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- {{ dd($post->id) }} --}}
     <div class="container lg:w-3/4 md:w-4/5 w-11/12 mx-auto my-8 px-8 py-4 bg-white shadow-md">
 
         <x-flash-message :message="session('notice')" />
@@ -21,19 +20,17 @@
             <img src="{{ $post->image_url }}" alt="" class="mb-4 mx-auto">
             <p class="text-gray-700 text-base break-words">{!! nl2br(e($post->body)) !!}</p>
             @auth
-                @if ($alreadyLike)
-                    <form action="{{ route('likes.destroy') }}" method="POST" class="mt-2">
+                @if (!empty($like))
+                    <form action="{{ route('posts.likes.destroy', [$post, $like]) }}" method="POST" class="mt-2">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-                        <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <x-action-button type="submit" color="pink" text="お気に入り削除" />
                     </form>
                 @else
-                    <form action="{{ route('likes.store') }}" method="POST" class="mt-2">
+                    <form action="{{ route('posts.likes.store', $post) }}" method="POST" class="mt-2">
                         @csrf
-                        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-                        <input type="hidden" name="post_id" value="{{ $post->id }}">
+                        {{-- <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+                        <input type="hidden" name="post_id" value="{{ $post->id }}"> --}}
                         <x-action-button type="submit" color="blue" text="お気に入り" />
                     </form>
                 @endif

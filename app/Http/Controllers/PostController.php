@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -78,15 +79,15 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->load('user')->load('likes');
-        $alreadyLike = 0;
-        foreach ($post->likes as $like) {
-            if ($like->user_id == Auth::id()) {
-                $alreadyLike = 1;
+        $like = null;
+        foreach ($post->likes as $postLike) {
+            if ($postLike->user_id == Auth::id()) {
+                $like = Like::find($postLike->id);
                 break;
             }
         }
 
-        return view('posts.show', compact('post', 'alreadyLike'));
+        return view('posts.show', compact('post', 'like'));
     }
 
     /**
