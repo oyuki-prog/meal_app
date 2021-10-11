@@ -29,7 +29,7 @@ class PostFactory extends Factory
         $file = $this->faker->image();
         $fileName = basename($file);
 
-        Storage::putFileAs('images/posts', $file, $fileName);
+        Storage::putFileAs('public/images/posts', $file, $fileName);
         File::delete($file);
 
         return [
