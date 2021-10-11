@@ -29,8 +29,6 @@
                 @else
                     <form action="{{ route('posts.likes.store', $post) }}" method="POST" class="mt-2">
                         @csrf
-                        {{-- <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-                        <input type="hidden" name="post_id" value="{{ $post->id }}"> --}}
                         <x-action-button type="submit" color="blue" text="お気に入り" />
                     </form>
                 @endif

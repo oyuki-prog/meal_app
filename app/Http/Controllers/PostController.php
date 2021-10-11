@@ -78,15 +78,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->load('user')->load('likes');
-        $like = null;
-        foreach ($post->likes as $postLike) {
-            if ($postLike->user_id == Auth::id()) {
-                $like = Like::find($postLike->id);
-                break;
-            }
-        }
-
+        $like = $post->likes->where('user_id',Auth::id())->first();
         return view('posts.show', compact('post', 'like'));
     }
 

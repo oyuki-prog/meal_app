@@ -31,10 +31,10 @@ class LikeController extends Controller
 
     public function destroy(Request $request, Post $post, Like $like)
     {
-        // if ($request->user()->cannot('destroy', $like)) {
-        //     return redirect()
-        //         ->route('posts.show', $post);
-        // }
+        if ($request->user()->cannot('destroy', $like)) {
+            return redirect()
+                ->route('posts.show', $post);
+        }
 
         try {
             if (!empty($like)) {
